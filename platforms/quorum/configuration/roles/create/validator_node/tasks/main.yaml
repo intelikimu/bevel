@@ -1,20 +1,9 @@
-##############################################################################################
-#  Copyright Accenture. All Rights Reserved.
-#
-#  SPDX-License-Identifier: Apache-2.0
-##############################################################################################
-
-# This task creates helm release file for each validator node of organization
-- name: Create helm release file for each validator node of organization
+# Create value file for validator node
+- name: Create value file for validator node
   include_role:
     name: create/helm_component
   vars:
-    component_name: "{{ peer.name }}"
-    type: "validatorquorum"
-  loop: "{{ org.services.validators }}"
-  loop_control:
-    loop_var: peer
-  when: org.services.validators is defined
+    type: "validator_quorum"
 
 # Git Push : Pushes the above generated files to git 
 - name: Git Push
@@ -22,23 +11,14 @@
     name: "{{ playbook_dir }}/../../shared/configuration/roles/git_push"
   vars:
     GIT_DIR: "{{ playbook_dir }}/../../../"
-    msg: "[ci skip] Pushing Validator files"
-  when: org.services.validators is defined
+    msg: "[ci skip] Pushing Validator Helm release file"
 
 # Wait for the last validator to be running
 - name: "Wait for the last validator to run"
   include_role:
     name: "{{ playbook_dir }}/../../shared/configuration/roles/check/helm_component"
   vars:
-    validator: "{{ org.services.validators | last }}"
     label_selectors:
-      - app.kubernetes.io/release = {{ validator.name | lower }}
+      - app.kubernetes.io/release = {{ component_name }}
     component_type: "Pod"
     namespace: "{{ component_ns }}"
-  when: org.services.validators is defined
-
-# Get the Genesis and staticnodes
-- name: Get genesis and staticnodes
-  include_role: 
-    name: get/genesis
-  when: org.services.validators is defined

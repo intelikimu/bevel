@@ -29,8 +29,7 @@ rawGenesisConfig:
     gasLimit: '0x1fffffffffffff' 
     difficulty: '0x1'
     coinbase: '0x0000000000000000000000000000000000000000'
-    additionalAccounts: {{ network.config.accounts }}
-    permissioning: {{ network.permissioning.enabled }}
+    includeQuickStartAccounts: false
   blockchain:
     nodes:
       generate: true

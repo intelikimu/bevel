@@ -98,7 +98,8 @@ node:
 image:
   quorum:
     repository: quorumengineering/quorum
-    tag: 22.7.1
+    # latest is equivalent to 24.4.1
+    tag: latest    # latest | 22.7.1
   hooks:
     repository: ghcr.io/hyperledger/bevel-k8s-hooks
     tag: qgt-0.2.12

@@ -7,8 +7,8 @@
 helm_templates:
   quorum_tessera: tessera.tpl
   quorum: quorum.tpl
-  validatorquorum: validatorquorum.tpl
-  memberquorum: memberquorum.tpl
+  validator_quorum: validator_quorum.tpl
+  member_quorum: member_quorum.tpl
   crypto_tessera: crypto_tessera.tpl
   crypto_ibft_job: crypto_ibft_job.tpl
   certs-ambassador-quorum: certs-ambassador-quorum.tpl

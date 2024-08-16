@@ -27,11 +27,10 @@
         kubernetes: "{{ item.k8s }}"
       loop: "{{ network['organizations'] }}"
 
-    # Delete build directory
-    - name: Remove build directory
-      file:
-        path: "./build"
-        state: absent
+    # Clean up helpers directory
+    - name: "Clean up helpers directory"
+      include_role:
+        name: delete/local_directories
 
   #These variables can be overriden from the command line
   vars:
