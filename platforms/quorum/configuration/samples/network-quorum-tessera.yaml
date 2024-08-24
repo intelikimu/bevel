@@ -12,7 +12,7 @@ network:
   # Network level configuration specifies the attributes required for each organization
   # to join an existing network.
   type: quorum
-  version: 23.4.0  #this is the version of Quorum 
+  version: 24.4.1  #this is the version of Quorum 
 
   #Environment section for Kubernetes setup
   env:

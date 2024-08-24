@@ -12,7 +12,7 @@ network:
   # Network level configuration specifies the attributes required for each organization
   # to join an existing network.
   type: quorum
-  version: 23.4.0  #this is the version of Quorum 
+  version: 24.4.1  #this is the version of Quorum 
 
   #Environment section for Kubernetes setup
   env:
@@ -100,9 +100,11 @@ network:
         private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
       # The participating nodes are named as peers
       services:
+        # The first four validators must be named in the following order: validator-0, validator-1, validator-2, validator-3.
+        # Note: Beyond the initial four, custom names can be defined as needed
         validators:
         - validator:
-          name: validator-1
+          name: validator-0
           bootnode: true          # true if the validator node is used also a bootnode for the network
           cactus_connector: disabled  # set to enabled to create a cactus connector for Besu
           p2p:
@@ -117,7 +119,7 @@ network:
             enabled: true      # Set this to true to enable Prometheus monitoring for this node, or false to disable it.
             port: 9545         # Specify the port that Prometheus will use to collect metrics for this node. 
         - validator:
-          name: validator-2
+          name: validator-1
           bootnode: true          # true if the validator node is used also a bootnode for the network
           cactus_connector: disabled  # set to enabled to create a cactus connector for Besu
           p2p:
@@ -132,7 +134,7 @@ network:
             enabled: true      # Set this to true to enable Prometheus monitoring for this node, or false to disable it.
             port: 9545         # Specify the port that Prometheus will use to collect metrics for this node. 
         - validator:
-          name: validator-3
+          name: validator-2
           bootnode: false          # true if the validator node is used also a bootnode for the network
           p2p:
             port: 21000
@@ -146,7 +148,7 @@ network:
             enabled: false      # Set this to true to enable Prometheus monitoring for this node, or false to disable it.
             port: 9545          # Specify the port that Prometheus will use to collect metrics for this node. 
         - validator:
-          name: validator-4
+          name: validator-3
           bootnode: false          # true if the validator node is used also a bootnode for the network
           p2p:
             port: 21000

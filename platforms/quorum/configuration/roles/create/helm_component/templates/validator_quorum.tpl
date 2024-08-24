@@ -23,13 +23,17 @@ spec:
         cloudNativeServices: false
       vault:
         address: {{ vault.url }}
-        secretPrefix: data/{{ network.env.type }}{{ name }}
+        secretPrefix: data/{{ network.env.type }}{{ org_name }}
         network: quorum
         role: vault-role
-        authPath: {{ network.env.type }}{{ name }}
+        authPath: {{ network.env.type }}{{ org_name }}
         type: {{ vault.type | default("hashicorp") }}
         secretEngine: {{ vault.secret_path | default("secretsv2") }}
       proxy:
         provider: "ambassador"
         externalUrlSuffix: {{ org.external_url_suffix }}
-        p2p: {{ peer.p2p.ambassador }}
+        p2p: {{ validator.p2p.ambassador }}
+    tessera:
+      enabled: false
+    tls:
+      enabled: false

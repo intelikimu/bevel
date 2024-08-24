@@ -25,8 +25,8 @@ charts:
   corda_node: corda-node
   quorum_tessera: quorum-tessera-node
   quorum: quorum-member-node
-  validatorquorum: quorum-node
-  memberquorum: quorum-node
+  validator_quorum: quorum-node
+  member_quorum: quorum-node
   pki-generator: cenm-pki-gen
   signer: cenm-signer
   gateway: cenm-gateway

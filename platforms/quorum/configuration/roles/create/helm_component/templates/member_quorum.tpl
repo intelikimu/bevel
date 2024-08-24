@@ -25,15 +25,15 @@ spec:
         type: {{ vault.type | default("hashicorp") }}
         network: quorum
         address: {{ vault.url }}
-        secretPrefix: "data/{{ network.env.type }}{{ name }}"
+        secretPrefix: "data/{{ network.env.type }}{{ org_name }}"
         secretEngine: {{ vault.secret_path | default("secretsv2") }}
         role: vault-role
-        authPath: {{ network.env.type }}{{ name }}
+        authPath: {{ network.env.type }}{{ org_name }}
       proxy:
         provider: ambassador
         externalUrlSuffix: {{ org.external_url_suffix }}
-        p2p: {{ peer.p2p.ambassador }}
-        tmport: {{ peer.tm_nodeport.ambassador | default(443) }}
+        p2p: {{ member.p2p.ambassador }}
+        tmport: {{ member.tm_nodeport.ambassador | default(443) }}
     storage:
       size: "2Gi"
     tessera:

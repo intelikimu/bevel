@@ -4,6 +4,7 @@
 #  SPDX-License-Identifier: Apache-2.0
 ##############################################################################################
 
+##############################################################################################
 # This playbook deploys a DLT network on existing Kubernetes clusters
 # The Kubernetes clusters should already be created and the infomation to connect to the
 #  clusters be updated in the network.yaml file that is used as an input to this playbook
@@ -11,6 +12,7 @@
 # To Run this playbook from this directory, use the following command (network.yaml also in this directory)
 #  ansible-playbook deploy-network.yaml -e "@./network.yaml"
 ############################################################################################
+
 # Please ensure that the ../../shared/configuration playbooks have been run using the same network.yaml
 - hosts: ansible_provisioners
   gather_facts: no
@@ -21,7 +23,12 @@
     file:
       path: "./build"
       state: absent
-
+  
+  # Validate input network.yaml
+  - name: "Validating network.yaml"
+    include_role:
+      name: check/validation
+  
   # create namespace
   - name: "Create namespace"
     include_role:
@@ -46,63 +53,35 @@
       loop_var: org
     when: 
     - org.org_status is not defined or org.org_status == 'new'
-
-  # Execute primary genesis for the first organization
-  - name: "Setup primary genesis with first org as Validators"
+  
+  # Install primary Genesis
+  - name: "Install primary Genesis"
     include_role:
-      name: setup/genesis/primary
+      name: setup/genesis/primary_genesis
     vars:
-      build_path: "./build"
-      org: "{{ network['organizations'] | first }}"
-      name: "{{ org.name | lower }}"
-      component_ns: "{{ org.name | lower }}-quo"
+      validator_count: "{{ total_validators | int }}"
+  
+  # Deploy nodes
+  - name: "Deploy nodes"
+    include_role:
+      name: setup/nodes
+    vars:
+      org_name: "{{ org.name | lower }}"
+      component_ns: "{{ org_name }}-quo"
+      validators: "{{ org.services.validators }}"
+      members: "{{ org.services.peers }}"
+      cloud_provider: "{{ org.cloud_provider | lower }}"
       kubernetes: "{{ org.k8s }}"
       vault: "{{ org.vault }}"
       gitops: "{{ org.gitops }}"
       charts_dir: "{{ org.gitops.chart_source }}"
-      values_dir: "./build/{{ component_ns }}"
-    when: 
-      - not (add_new_org | bool)
-
-  # # This role deploy validator nodes
-  - name: "Deploy validator nodes"
-    include_role:
-      name: create/validator_node
-    vars:
-      build_path: "./build"
-      org: "{{ network['organizations'] | first }}"
-      name: "{{ org.name | lower }}"
-      component_ns: "{{ org.name | lower }}-quo"
-      kubernetes: "{{ org.k8s }}"
-      vault: "{{ org.vault }}"
-      gitops: "{{ org.gitops }}"
-      charts_dir: "{{ org.gitops.chart_source }}"
-      values_dir: "{{playbook_dir}}/../../../{{org.gitops.release_dir}}/{{ component_ns }}"
-    when: 
-    - org.org_status is not defined or org.org_status == 'new'
-
-  # Deploy member nodes
-  - name: "Deploy member nodes with tessera transaction manager"
-    include_role:
-      name: create/member_node
-    vars:
-      build_path: "./build"
-      kubernetes: "{{ org.k8s }}"
-      name: "{{ org.name | lower }}"
-      firstorg: "{{ network['organizations'] | first }}"
-      consensus: "{{ network.config.consensus }}"
-      component_ns: "{{ org.name | lower }}-quo"
-      vault: "{{ org.vault }}"
-      gitops: "{{ org.gitops }}"
-      charts_dir: "{{ org.gitops.chart_source }}"
-      values_dir: "{{playbook_dir}}/../../../{{org.gitops.release_dir}}/{{ component_ns }}"
-      geth_data: "{{ network.config.bootnode | default('null') }}"
+      values_dir: "{{playbook_dir}}/../../../{{org.gitops.release_dir}}/{{ org_name }}"
+      current_org_index: "{{ org_index }}"
     loop: "{{ network['organizations'] }}"
     loop_control:
       loop_var: org
-    when: 
-      - org.org_status is not defined or org.org_status == 'new'
-
+      index_var: org_index
+  
   #These variables can be overriden from the command line
   vars:
     install_os: "linux"           # Default to linux OS
