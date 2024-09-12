@@ -166,13 +166,13 @@ spec:
             if  [ "$KUBENETES_SECRET" = "" ]; then
               ADMIN_TLS_SECRET=false
             else
-              OSN_TLS_CA_ROOT_CERT=$(echo ${KUBENETES_SECRET} | jq -r '.data.ca_crt'  | base64 -d)
-              ADMIN_TLS_SIGN_CERT=$(echo ${KUBENETES_SECRET} | jq -r '.data.client_crt'  | base64 -d)
-              ADMIN_TLS_PRIVATE_KEY=$(echo ${KUBENETES_SECRET} | jq -r '.data.client_key'  | base64 -d)
+              OSN_TLS_CA_ROOT_CERT=$(echo ${KUBENETES_SECRET} | jq -r '.data.cacrt'  | base64 -d)
+              ADMIN_TLS_SIGN_CERT=$(echo ${KUBENETES_SECRET} | jq -r '.data.clientcrt'  | base64 -d)
+              ADMIN_TLS_PRIVATE_KEY=$(echo ${KUBENETES_SECRET} | jq -r '.data.clientkey'  | base64 -d)
 
               echo "${OSN_TLS_CA_ROOT_CERT}" > ${OUTPUT_TLS_PATH}/tlsca.crt
-              echo "${ADMIN_TLS_SIGN_CERT}" > ${OUTPUT_PATH}/cacerts/server.crt
-              echo "${ADMIN_TLS_PRIVATE_KEY}" > ${OUTPUT_PATH}/keystore/server.key 
+              echo "${ADMIN_TLS_SIGN_CERT}" > ${OUTPUT_TLS_PATH}/server.crt
+              echo "${ADMIN_TLS_PRIVATE_KEY}" > ${OUTPUT_TLS_PATH}/server.key 
               ADMIN_TLS_SECRET=true
             fi            
           }
@@ -184,7 +184,7 @@ spec:
           do
 
             OUTPUT_PATH="${MOUNT_PATH}/admin/msp"
-            OUTPUT_TLS_PATH="${MOUNT_PATH}/tls/msp"
+            OUTPUT_TLS_PATH="${MOUNT_PATH}/tls"
             mkdir -p ${OUTPUT_TLS_PATH}
             mkdir -p ${OUTPUT_PATH}/admincerts
             mkdir -p ${OUTPUT_PATH}/cacerts
