@@ -59,7 +59,7 @@ install_packages() {
     case "$PACKAGE_MNG" in
     apt-get)
         apt-get update
-        apt-get install -y $PACKAGES
+        DEBIAN_FRONTEND=noninteractive apt-get install -y $PACKAGES
         ;;
     apk)
         apk update

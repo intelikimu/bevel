@@ -3,10 +3,11 @@
 global:
   serviceAccountName: vault-auth
   cluster:
+    cloudNativeServices: false # true | false
     provider: aws
-    cloudNativeServices: false
+    secretManagerRegion: 
   vault:
-    type: kubernetes
+    type: kubernetes # kubernetes
   proxy:
     provider: none
     externalUrlSuffix: svc.cluster.local

@@ -4,10 +4,11 @@
 global:
   serviceAccountName: vault-auth
   cluster:
+    cloudNativeServices: false # true | false
     provider: aws
-    cloudNativeServices: false # set to true to use Cloud Native Services (SecretsManager and IAM for AWS; KeyVault & Managed Identities for Azure)
+    secretManagerRegion: 
   vault:
-    type: kubernetes
+    type: kubernetes # kubernetes
 
   proxy:
     provider: none
