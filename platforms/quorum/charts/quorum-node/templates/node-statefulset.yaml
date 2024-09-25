@@ -147,20 +147,20 @@ spec:
 
               # Create the necessary directory structure
               mkdir -p {{ .Release.Name }}/data/keystore
-
+              
               # Move files to their respective locations
               cp staticNode/static-nodes.json {{ .Release.Name }}/data/
               cp genesis/genesis.json {{ .Release.Name }}/data/
-              cp nodeSecrets/nodekey* {{ .Release.Name }}/nodeSecrets/address {{ .Release.Name }}/data/
+              cp nodeSecrets/nodekey* nodeSecrets/address {{ .Release.Name }}/data/
               cp nodeSecrets/account* {{ .Release.Name }}/data/keystore/
               cd {{ .Release.Name }}/
-
+              
               # Initialize the node
               geth --datadir data init data/genesis.json
-
+              
               # Extract the address from the account keystore file
               export ADDRESS=$(grep -o '"address": *"[^"]*"' ./data/keystore/accountKeystore | grep -o '"[^"]*"$' | sed 's/"//g')
-
+              
               # Start the node
               geth \
               --datadir {{ .Values.node.quorum.dataPath }} \
@@ -196,4 +196,4 @@ spec:
             name: quorum-genesis
         - name: node-keys
           secret:
-            secretName: {{ template "quorum-node.fullname" . }}-keys
+            secretName: {{ template "quorum-node.fullname" . }}-{{ .Release.Namespace }}-keys
