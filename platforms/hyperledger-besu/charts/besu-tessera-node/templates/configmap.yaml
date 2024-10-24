@@ -24,7 +24,7 @@ data:
       "useWhiteList": "false",
       "jdbc": {
         "username": {{ .Values.tessera.dbUsername | quote }},
-        "password": "",
+        "password": {{ .Values.tessera.password | quote }},
         "url": "jdbc:mysql://{{ include "besu-tessera-node.fullname" . }}:{{ .Values.tessera.dbport }}/demodb"
       },
       "serverConfigs": [
