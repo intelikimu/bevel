@@ -9,6 +9,7 @@ This is the list of maintainers, including their github profiles for direct comm
 | Sownak Roy             | @sownak                  | Product vision, Architecture, Development   |
 | Suvajit Sarkar         | @suvajit-sarkar          | Product roadmap, Architecture, Development  |
 | Aditya Joshi           | @adityajoshi12           | Architecture, Development                   |
+| Alvaro Picazo          | @alvaropicazo            | Architecture, Development                   |
 
 ## Emeritus Maintainers
 
