@@ -214,5 +214,7 @@ spec:
       volumes:
       - name: scripts-volume
         configMap:
+{{- if eq .Values.global.vault.type "hashicorp" }}
           name: bevel-vault-script
           defaultMode: 0777
+{{- end }}

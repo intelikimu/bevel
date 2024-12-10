@@ -37,9 +37,11 @@ spec:
           volumeMounts:
             - name: generated-config
               mountPath: /generated-config
+{{- if eq .Values.global.vault.type "hashicorp" }}
             - name: scripts-volume
               mountPath: /scripts/bevel-vault.sh
               subPath: bevel-vault.sh
+{{- end }}
           env:
           - name: VAULT_ADDR
             value: "{{ .Values.global.vault.address }}"
@@ -257,7 +259,9 @@ spec:
       volumes:
       - name: generated-config
         emptyDir: {}
+{{- if eq .Values.global.vault.type "hashicorp" }}
       - name: scripts-volume
         configMap:
           name: bevel-vault-script
           defaultMode: 0777
+{{- end }}
