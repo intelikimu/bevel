@@ -68,6 +68,8 @@ rawGenesisConfig:
     includeQuickStartAccounts: false
     additionalAccounts: []
     permissioning: false
+  initialContractDeployment:
+    enabled: false
   blockchain:
     nodes:
       generate: true
