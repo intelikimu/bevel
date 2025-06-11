@@ -7,7 +7,7 @@ there's always plenty to do!
 
 First things first, please review the [Hyperledger Code of Conduct](https://wiki.hyperledger.org/display/HYP/Hyperledger+Code+of+Conduct) before participating and please follow it in all your interactions with the project.
 
-You can contibute to Hyperledger Bevel, as a user or/and as a developer.
+You can contribute to Hyperledger Bevel, as a user or/and as a developer.
 
 ##### As a user:
 
@@ -117,7 +117,7 @@ The current directory structure is described as the following:
 
 
 > - automation/ : This folder contains the Jenkinsfile to deploy DLT Platforms supported by Hyperledger Bevel on a demo environment.
->   - hyperledger-fabric/ : ontains network.yaml file and fabric Jenkinsfile
+>   - hyperledger-fabric/ : contains network.yaml file and fabric Jenkinsfile
 >   - r3-corda/ : Contains network.yaml file and Jenkinsfile for doorman,networkmap and entire network deployment file.
 >   - initcontainer.Jenkinsfile : This file is used to initialize a container with basic configuration. This will be used on both hyperledger and r3-corda platforms.
 > - docs/

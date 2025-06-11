@@ -37,7 +37,7 @@ Hyperledger Bevel creates/provides own Docker images, which are based on Ubuntu 
 ## Vault Configuration
 
 Hyperledger Bevel stores their `crypto` immediately within the secret secrets engine.
-The `crypto` is stored by each organization under `/org_name_lowercase` - it contains provate/public keys, dids and seeds.
+The `crypto` is stored by each organization under `/org_name_lowercase` - it contains private/public keys, dids and seeds.
 
 
 The complete key paths in the vault can be referred [here](../certificates/indy.md).

@@ -4,7 +4,7 @@ The haproxy-ingress folder keeps the helm chart tgz file of haproxy-ingress proj
 
 ## Usage
 
-The values.yaml contains the default values by the helm chart, this file can be modifed to configure the haproxy-ingress deployment.
+The values.yaml contains the default values by the helm chart, this file can be modified to configure the haproxy-ingress deployment.
 
 ## Customizing the chart
 
