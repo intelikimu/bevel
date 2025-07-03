@@ -1,0 +1,63 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ca
+  namespace: manufacturer-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  interval: 1m
+  releaseName: ca
+  chart:
+    spec:
+      interval: 1m
+      sourceRef:
+        kind: GitRepository
+        name: flux-dev
+        namespace: flux-dev
+      chart: platforms/hyperledger-fabric/charts/fabric-ca-server   
+  values:
+    global:
+      serviceAccountName: vault-auth
+      cluster:
+        provider: minikube
+        cloudNativeServices: false
+        kubernetesUrl: https://192.168.58.2:8443
+      vault:
+        type: hashicorp
+        network: fabric
+        address: http://host.minikube.internal:8200
+        authPath: devmanufacturer
+        secretEngine: secretsv2
+        secretPrefix: "data/devmanufacturer"
+        role: vault-role
+        tls: false
+      proxy:
+        provider: none
+        externalUrlSuffix: org2proxy.blockchaincloudpoc.com
+
+    storage:
+      size: 512Mi
+      reclaimPolicy: "Delete"
+      volumeBindingMode: Immediate
+      allowedTopologies:
+        enabled: false
+
+    image:
+      alpineUtils: ghcr.io/hyperledger/bevel-alpine:latest
+      ca: ghcr.io/hyperledger/bevel-fabric-ca:1.4.8
+      pullSecret: regcred
+
+    server:
+      removeCertsOnDelete: true
+      tlsStatus: true
+      adminUsername: manufacturer-admin
+      adminPassword: manufacturer-adminpw
+      subject: "/C=CH/ST=Zurich/L=Zurich/O=Manufacturer"
+      clusterIpPort: 7054
+
+    labels:
+      service:
+        - example1: example2
+      pvc:
+      deployment:
