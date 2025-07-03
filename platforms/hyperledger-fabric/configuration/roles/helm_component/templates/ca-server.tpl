@@ -57,7 +57,7 @@ spec:
       tlsStatus: true
       adminUsername: {{ component }}-admin
       adminPassword: {{ component }}-adminpw
-      subject: "{{ subject | quote }}"
+      subject: "{{ subject }}"
 {% if component_services.ca.configpath is defined %}
       configPath: conf/fabric-ca-server-config-{{ component }}.yaml
 {% endif %}
