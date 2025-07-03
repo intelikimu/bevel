@@ -31,7 +31,7 @@
     name: k8_component
   vars:    
     component_type: "namespace"    
-  when: get_namespace.resources|length == 0
+  when: result.resources|length == 0
 
 # Git Push : Push the above generated files to git directory 
 - name: Git Push
