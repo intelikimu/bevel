@@ -26,7 +26,7 @@ spec:
       vault:
         type: hashicorp
         network: fabric
-        address: http://172.17.190.212:8200
+        address: http://host.minikube.internal:8200
         authPath: devsupplychain
         secretEngine: secretsv2
         secretPrefix: "data/devsupplychain"
