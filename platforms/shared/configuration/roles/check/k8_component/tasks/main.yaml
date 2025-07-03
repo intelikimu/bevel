@@ -34,16 +34,16 @@
   k8s_info:
     kind: "{{ component_type }}"
     name: "{{ component_name }}"
-    kubeconfig: "/home/bevel/build/config"
-    context: "minikube"
-  register: component_data
-  retries: 50
-  delay: 10
-  until: component_data is defined and component_data.resources is defined and component_data.resources|length > 0
+    kubeconfig: "{{ kubernetes.config_file }}"
+    context: "{{ kubernetes.context }}"
+  register: retry_component_data
+  retries: "{{ network.env.retry_count }}"
+  delay: 35
+  until: retry_component_data.resources|length > 0
   when: 
     - component_type == "Namespace" or component_type == "ClusterRoleBinding" or component_type == "StorageClass"
     - type is undefined or type == "retry"
-  register: retry_result
+
 
 
 
