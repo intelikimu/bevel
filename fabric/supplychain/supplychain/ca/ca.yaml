@@ -13,8 +13,8 @@ spec:
       interval: 1m
       sourceRef:
         kind: GitRepository
-        name: flux-local
-        namespace: flux-local
+        name: flux-dev
+        namespace: flux-dev
       chart: platforms/hyperledger-fabric/charts/fabric-ca-server   
   values:
     global:
@@ -27,14 +27,14 @@ spec:
         type: hashicorp
         network: fabric
         address: http://172.27.31.179:8200
-        authPath: localsupplychain
+        authPath: devsupplychain
         secretEngine: secretsv2
-        secretPrefix: "data/localsupplychain"
+        secretPrefix: "data/devsupplychain"
         role: vault-role
         tls: false
       proxy:
-        provider: none
-        externalUrlSuffix: develop.local.com
+        provider: haproxy
+        externalUrlSuffix: org1proxy.blockchaincloudpoc.com
 
     storage:
       size: 512Mi
@@ -53,6 +53,11 @@ spec:
       tlsStatus: true
       adminUsername: supplychain-admin
       adminPassword: supplychain-adminpw
-      subject: "/C=GB/ST=London/L=London/O=Orderer/CN=ca.supplychain-net"
+      subject: "/C=GB/ST=London/L=London/O=Orderer"
       clusterIpPort: 7054
 
+    labels:
+      service:
+        - example1: example2
+      pvc:
+      deployment:
