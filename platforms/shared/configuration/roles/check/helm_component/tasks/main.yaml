@@ -79,7 +79,9 @@
   register: component_data
   retries: "{{ network.env.retry_count }}"
   delay: "{{ delay | default(30) }}"
-  until: component_data.resources | length > 0
+  until: component_data is defined and
+         component_data.resources is defined and
+         component_data.resources | length > 0
   when: component_type == "Pod"
 
 - name: "Confirm pod {{ component_name }} is running"
