@@ -5,9 +5,9 @@
 ##############################################################################################
 
 ---
+
 # Task to check if Job deployed and completed
-# This task will try for a maximum of 10 times with an interval of
-# 60 seconds between each try
+# This task will try for a maximum of 10 times with an interval of 60 seconds between each try
 
 # Log the status before retry for Job
 - name: Log status before checking job {{ component_name }}
@@ -26,7 +26,10 @@
   register: component_data
   retries: "{{ network.env.retry_count }}"
   delay: 30
-  until: component_data.resources|length > 0 and ((component_data.resources[0].status.phase is defined and component_data.resources[0].status.phase == "Succeeded") or (component_data.resources[0].status.succeeded is defined and component_data.resources[0].status.succeeded == 1))
+  until: component_data.resources|length > 0 and (
+    (component_data.resources[0].status.phase is defined and component_data.resources[0].status.phase == "Succeeded") or
+    (component_data.resources[0].status.succeeded is defined and component_data.resources[0].status.succeeded == 1)
+  )
   when: component_type == "Job"
   register: job_retry_result
 
@@ -45,7 +48,7 @@
     - component_type == "Job"
     - job_retry_result.failed is defined and job_retry_result.failed
 
-# one time job check and registers the result variable
+# One time job check and registers the result variable
 - name: "Check for job {{ component_name }} in {{ namespace }}"
   k8s_info:
     kind: "Pod"
@@ -64,8 +67,6 @@
   when: component_type == "Pod"
 
 # Task to check if Pod is deployed and running
-# This task will try for a maximum of 10 times with an interval of
-# 60 seconds between each try
 - name: "Wait for pod {{ component_name }} to start in {{ namespace }}"
   k8s_info:
     kind: "Pod"
@@ -78,9 +79,15 @@
   register: component_data
   retries: "{{ network.env.retry_count }}"
   delay: "{{ delay | default(30) }}"
-  until: component_data.resources|length > 0
+  until: component_data.resources | length > 0
   when: component_type == "Pod"
-  register: pod_retry_result
+
+- name: "Confirm pod {{ component_name }} is running"
+  debug:
+    msg: "Pod {{ component_name }} is now running."
+  when:
+    - component_type == "Pod"
+    - component_data.resources | length > 0
 
 # Output debug message if Pod creation fails after retries
 - name: Debug information for pod {{ component_name }} failure
@@ -95,8 +102,8 @@
       Run 'kubectl describe pod -n {{ namespace }} -l {{ label_selectors | join(",") }}' for detailed events.
   when:
     - component_type == "Pod"
-    - pod_retry_result.failed is defined and pod_retry_result.failed
-  
+    - component_data is not defined or component_data.resources | length == 0
+
 # Print a warning message if job is still running/pending after retries but not failed
 - name: Status update for job {{ component_name }}
   debug:
@@ -105,4 +112,5 @@
     - component_type == "Job"
     - job_retry_result.failed is not defined or not job_retry_result.failed
     - component_data.resources|length > 0 
-    - (component_data.resources[0].status.phase is not defined or component_data.resources[0].status.phase != "Succeeded") and (component_data.resources[0].status.succeeded is not defined or component_data.resources[0].status.succeeded != 1)
+    - (component_data.resources[0].status.phase is not defined or component_data.resources[0].status.phase != "Succeeded") and
+      (component_data.resources[0].status.succeeded is not defined or component_data.resources[0].status.succeeded != 1)
