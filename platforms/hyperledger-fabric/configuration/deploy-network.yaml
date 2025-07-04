@@ -51,14 +51,14 @@
       when: 
       - org.org_status is not defined or org.org_status == 'new'
 
-    - name: Check if ca.yaml exists
-      stat:
-        path: /home/bevel/fabric/supplychain/store/ca/ca.yaml
-      register: ca_yaml_stat
+    # - name: Check if ca.yaml exists
+    #   stat:
+    #     path: /home/bevel/fabric/supplychain/store/ca/ca.yaml
+    #   register: ca_yaml_stat
 
-    - name: Set ca_yaml_exists fact
-      set_fact:
-        ca_yaml_exists: "{{ ca_yaml_stat.stat.exists }}"
+    # - name: Set ca_yaml_exists fact
+    #   set_fact:
+    #     ca_yaml_exists: "{{ ca_yaml_stat.stat.exists }}"
 
   
     # Create CA Server helm-value files and check-in
